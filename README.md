@@ -1,5 +1,6 @@
 # LogSaver
-A simple file logging system for Python projects. Automatically creates timestamped log files with process names and line number tracking.
+- Create simple logs for your Python project.
+- Uses process names and timestamps to automatically create and write to a log file.
 
 ## Installation
 ```bash
@@ -32,3 +33,6 @@ logs.error("Something went wrong")
 [ INFO ] - 14:30:45 12-07-2025 : my_script : Process started
 [ ERROR ] - 14:30:46 12-07-2025 : my_script : Connection failed
 ```
+### Future Plans
+- Tracking which line the log came from.
+- Configuration options.
