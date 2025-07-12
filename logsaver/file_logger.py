@@ -21,7 +21,7 @@ class LogSaver:
             process_name = process_name[:-3]
 
         # Create timestamp
-        timestamp = datetime.now().strftime("%S%M%H_%d-%m-%Y")
+        timestamp = datetime.now().strftime("%H%M%S_%d-%m-%Y")
 
         # Initialise log file
         log_filename = f"{process_name}_{timestamp}.log"
