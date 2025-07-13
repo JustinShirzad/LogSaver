@@ -1,6 +1,8 @@
 import os
 import sys
+import random # Delete this import later
 import logging
+import inspect
 from datetime import datetime 
 
 class LogSaver:
@@ -21,7 +23,7 @@ class LogSaver:
             process_name = process_name[:-3]
 
         # Create timestamp
-        timestamp = datetime.now().strftime("%H%M%S_%d-%m-%Y")
+        timestamp = datetime.now().strftime("%H%M%S_%Y-%m-%d")
 
         # Initialise log file
         log_filename = f"{process_name}_{timestamp}.log"
@@ -43,7 +45,7 @@ class LogSaver:
         
         # Format the log messages for the file
         log_formatter = logging.Formatter(
-            fmt='[ %(levelname)s ] - %(asctime)s : %(name)s : %(message)s',
+            fmt='[ %(levelname)s ] - %(asctime)s : %(name)s - %(message)s',
             datefmt='%H:%M:%S %d-%m-%Y'
         )
         file_handler.setFormatter(log_formatter)
@@ -51,34 +53,52 @@ class LogSaver:
         # Add handler to logger
         self.logger.addHandler(file_handler)
 
+    def create_log(self, log_level, message):
+        # Navigate to the frame where the logging method was called
+        process_frame = inspect.currentframe().f_back.f_back
+        process_lineno = process_frame.f_lineno
+
+        if log_level == "debug":
+            self.logger.debug(f"Line {process_lineno} : {message}")
+        elif log_level == "info":
+            self.logger.info(f"Line {process_lineno} : {message}")
+        elif log_level == "warning":
+            self.logger.warning(f"Line {process_lineno} : {message}")
+        elif log_level == "error":
+            self.logger.error(f"Line {process_lineno} : {message}")
+        elif log_level == "critical":
+            self.logger.critical(f"Line {process_lineno} : {message}")
+
+        
+
     # Logging methods (Single letter)
     def D(self, message):
-        self.logger.debug(str(message))
+        self.create_log("debug", str(message))
 
     def I(self, message):
-        self.logger.info(str(message))
+        self.create_log("info", str(message))
     
     def W(self, message):
-        self.logger.warning(str(message))
+        self.create_log("warning", str(message))
 
     def E(self, message):
-        self.logger.error(str(message))
+        self.create_log("error", str(message))
 
     def C(self, message):
-        self.logger.critical(str(message))
+        self.create_log("critical", str(message))
 
-    #Logging methods (Full words)
+    # Logging methods (Full words)
     def debug(self, message):
-        self.logger.debug(str(message))
+        self.create_log("debug", str(message))
 
     def info(self, message):
-        self.logger.info(str(message))
+        self.create_log("info", str(message))
 
     def warning(self, message):
-        self.logger.warning(str(message))
+        self.create_log("warning", str(message))
 
     def error(self, message):
-        self.logger.error(str(message))
+        self.create_log("error", str(message))
 
     def critical(self, message):
-        self.logger.critical(str(message))
+        self.create_log("critical", str(message))
