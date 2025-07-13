@@ -6,7 +6,9 @@ from datetime import datetime
 
 class LogSaver:
     def __init__(
-            self, log_dir = "logs", 
+            self,
+            log_dir = "logs",
+            process_name = None,
             show_timestamp = True,
             show_process_name = True,
             show_line_number = True,
@@ -14,6 +16,7 @@ class LogSaver:
             ):
         
         self.log_dir = log_dir
+        self.process_name = process_name
         self.log_file, self.process_name = self.create_log_file()
         self.show_timestamp = show_timestamp
         self.show_process_name = show_process_name
@@ -28,9 +31,12 @@ class LogSaver:
         os.makedirs(relative_path, exist_ok=True)
 
         # Get process name
-        process_name = os.path.basename(sys.argv[0])
-        if process_name.endswith(".py"):
-            process_name = process_name[:-3]
+        if self.process_name is None:
+            process_name = os.path.basename(sys.argv[0])
+            if process_name.endswith(".py"):
+                process_name = process_name[:-3]
+        else:
+            process_name = self.process_name
 
         # Create timestamp
         timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")

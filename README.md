@@ -35,6 +35,11 @@ logs.error("Something went wrong")
 ```
 
 ## Configuations
+**Change process and file name**
+```python
+process_name="demo"
+```
+
 **Change folder directory**
 ```python
 log_dir="logs"
