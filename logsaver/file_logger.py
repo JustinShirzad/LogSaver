@@ -5,9 +5,20 @@ import inspect
 from datetime import datetime 
 
 class LogSaver:
-    def __init__(self, log_dir = "logs"):
+    def __init__(
+            self, log_dir = "logs", 
+            show_timestamp = True,
+            show_process_name = True,
+            show_line_number = True,
+            show_level = True
+            ):
+        
         self.log_dir = log_dir
         self.log_file, self.process_name = self.create_log_file()
+        self.show_timestamp = show_timestamp
+        self.show_process_name = show_process_name
+        self.show_line_number = show_line_number
+        self.show_level = show_level
         self.setup_logger()
 
     def create_log_file(self):
@@ -22,7 +33,7 @@ class LogSaver:
             process_name = process_name[:-3]
 
         # Create timestamp
-        timestamp = datetime.now().strftime("%H%M%S_%Y-%m-%d")
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
 
         # Initialise log file
         log_filename = f"{process_name}_{timestamp}.log"
@@ -41,10 +52,21 @@ class LogSaver:
         self.logger.handlers.clear()
         file_handler = logging.FileHandler(self.log_file)
         file_handler.setLevel(logging.DEBUG)
+
+        log_format = '[ %(levelname)s ] : %(asctime)s : %(name)s - %(message)s'
+
+        if not self.show_level:
+            log_format = log_format.replace('[ %(levelname)s ] : ', '')
+        if not self.show_timestamp:
+            log_format = log_format.replace('%(asctime)s : ', '')
+        if not self.show_process_name:
+            log_format = log_format.replace('%(name)s', '')
+        if not self.show_line_number and self.show_process_name:
+            log_format = log_format.replace(' - ', '')
         
         # Format the log messages for the file
         log_formatter = logging.Formatter(
-            fmt='[ %(levelname)s ] - %(asctime)s : %(name)s - %(message)s',
+            fmt=log_format,
             datefmt='%H:%M:%S %d-%m-%Y'
         )
         file_handler.setFormatter(log_formatter)
@@ -59,6 +81,9 @@ class LogSaver:
 
         formatted_message = f"Line {process_lineno} : {message}"
 
+        if not self.show_line_number:
+            formatted_message = f" : {message}"
+
         if log_level == "debug":
             self.logger.debug(formatted_message)
         elif log_level == "info":
@@ -69,8 +94,6 @@ class LogSaver:
             self.logger.error(formatted_message)
         elif log_level == "critical":
             self.logger.critical(formatted_message)
-
-        
 
     # Logging methods (Single letter)
     def D(self, message):
