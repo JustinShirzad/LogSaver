@@ -1,6 +1,5 @@
 import os
 import sys
-import random # Delete this import later
 import logging
 import inspect
 from datetime import datetime 
@@ -58,16 +57,18 @@ class LogSaver:
         process_frame = inspect.currentframe().f_back.f_back
         process_lineno = process_frame.f_lineno
 
+        formatted_message = f"Line {process_lineno} : {message}"
+
         if log_level == "debug":
-            self.logger.debug(f"Line {process_lineno} : {message}")
+            self.logger.debug(formatted_message)
         elif log_level == "info":
-            self.logger.info(f"Line {process_lineno} : {message}")
+            self.logger.info(formatted_message)
         elif log_level == "warning":
-            self.logger.warning(f"Line {process_lineno} : {message}")
+            self.logger.warning(formatted_message)
         elif log_level == "error":
-            self.logger.error(f"Line {process_lineno} : {message}")
+            self.logger.error(formatted_message)
         elif log_level == "critical":
-            self.logger.critical(f"Line {process_lineno} : {message}")
+            self.logger.critical(formatted_message)
 
         
 
