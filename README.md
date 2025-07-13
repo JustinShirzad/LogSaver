@@ -35,6 +35,11 @@ logs.error("Something went wrong")
 ```
 
 ## Configuations
+**Add an ID to the log**
+```python
+id=1
+```
+
 **Change process and file name**
 ```python
 process_name="demo"
@@ -67,7 +72,7 @@ show_line_number=True
 
 ```python
 # Example
-logs = LogSaver(log_dir="hello", show_timestamp=False)
+logs = LogSaver(id=1, log_dir="hello", show_timestamp=False)
 ```
 
 ### Future Plans

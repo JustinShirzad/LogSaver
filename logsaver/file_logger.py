@@ -9,6 +9,7 @@ class LogSaver:
             self,
             log_dir = "logs",
             process_name = None,
+            id = None,
             show_timestamp = True,
             show_process_name = True,
             show_line_number = True,
@@ -17,6 +18,7 @@ class LogSaver:
         
         self.log_dir = log_dir
         self.process_name = process_name
+        self.id = id
         self.log_file, self.process_name = self.create_log_file()
         self.show_timestamp = show_timestamp
         self.show_process_name = show_process_name
@@ -32,11 +34,22 @@ class LogSaver:
 
         # Get process name
         if self.process_name is None:
-            process_name = os.path.basename(sys.argv[0])
-            if process_name.endswith(".py"):
-                process_name = process_name[:-3]
+            process_frame = inspect.currentframe().f_back.f_back
+            process_func_name = process_frame.f_code.co_name
+            process_name = process_func_name
+
+            # Check if the parent function is the main module
+            if process_func_name == "<module>":
+                script_name = os.path.basename(sys.argv[0])
+                if script_name.endswith(".py"):
+                    script_name = script_name[:-3]
+                process_name = script_name
         else:
             process_name = self.process_name
+
+        # Add the id value
+        if self.id is not None:
+            process_name = f"{process_name}_{self.id}"
 
         # Create timestamp
         timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
