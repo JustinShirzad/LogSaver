@@ -30,9 +30,8 @@ logs.error("Something went wrong")
 
 ## Output Format
 ```
-[ INFO ] - 14:30:45 12-07-2025 : my_script : Process started
-[ ERROR ] - 14:30:46 12-07-2025 : my_script : Connection failed
+[ INFO ] - 14:30:45 12-07-2025 : my_script - Line 11 : Process started
+[ ERROR ] - 14:30:46 12-07-2025 : my_script - Line 12 : Connection failed
 ```
 ### Future Plans
-- Tracking which line the log came from.
 - Configuration options.
